@@ -1,0 +1,6 @@
+google-auth
+google-auth-oauthlib
+google-api-python-client
+transformers==4.36.2
+streamlit
+torch
