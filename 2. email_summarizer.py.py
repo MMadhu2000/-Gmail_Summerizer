@@ -4,24 +4,25 @@ import os
 
 def summarize_emails():
     if not os.path.exists('emails.json'):
-        print("❌ emails.json not found. Run 1_gmail_unread_extract.py first.")
+        print("emails.json not found. Run 1_gmail_unread_extract.py first.")
         return
     
     with open('emails.json', 'r', encoding='utf-8') as f:
         emails = json.load(f)
 
-    summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")  # Lighter, works without 4000 token issue
+    summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
 
     summarized_data = []
     for email_item in emails:
-        body = email_item['body']
-        if len(body.strip()) == 0:
+        body = email_item['body'].strip()
+        if not body:
             summary = "No body to summarize."
         else:
-            if len(body.split()) > 1024:
-                body = " ".join(body.split()[:1024])
+            truncated_body = body[:1000]
 
-            summary_text = summarizer(body, max_length=130, min_length=30, do_sample=False)[0]['summary_text']
+            summary_text = summarizer(
+                truncated_body, max_length=130, min_length=30, do_sample=False
+            )[0]['summary_text']
             summary = summary_text
         
         summarized_data.append({
