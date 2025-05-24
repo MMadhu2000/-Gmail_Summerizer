@@ -5,9 +5,9 @@ import email
 import json
 
 def extract_unread_emails():
-    SCOPES = ['gmail.readonly']#path
+    SCOPES = ['gmail.readonly'] # make sure they match exactly what Gmail API expects
     flow = InstalledAppFlow.from_client_secrets_file(
-        r'credentials.json', SCOPES)#Path
+        r'credentials.json', SCOPES) # Set the absolute path to your credentials.json
     creds = flow.run_local_server(port=0)
     service = build('gmail', 'v1', credentials=creds)
 
